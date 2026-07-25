@@ -1,9 +1,3 @@
-# =========================================================================
-# People Analytics at Teach For America — Recruitment Funnel Prediction
-# Team 5 | MAX 522: Predictive Analytics
-# Team: Adam Bashir, Adina Asanova, Barbie Jindal, Indrani Grewal,
-#       Rachel Lummis, Victoria Vann
-# =========================================================================
 # Goal: Predict which applicants are likely to withdraw from TFA's 6-stage
 # admissions pipeline, using classifiers trained on engineered behavioral,
 # academic, and sentiment features.
@@ -14,9 +8,8 @@
 # see TFA_Final_Presentation.pdf for the full 5-model comparison. Final
 # result: KNN was selected as the best-performing model (highest accuracy,
 # highest Kappa, and the best sensitivity/specificity balance).
-# =========================================================================
 
-# ---- Libraries ----
+# ---- Libraries
 library(caret)
 library(tidyverse)
 library(dplyr)
@@ -31,20 +24,20 @@ library(NeuralNetTools)
 
 set.seed(123)
 
-# ---- Load Dataset ----
+# ---- Load Dataset 
 org <- read.csv("~/Downloads/excel data set csv.csv", stringsAsFactors = FALSE)
 head(org)
 str(org)
 summary(org)
 
-# ---- Convert Dates + Create Early Submission Feature ----
+# ---- Convert Dates + Create Early Submission Feature 
 org$Application.Deadline <- mdy(org$Application.Deadline)
 org$Submitted.Date <- mdy(org$Submitted.Date)
 org$earlysubmission <- as.numeric(
   difftime(org$Application.Deadline, org$Submitted.Date, units = "days")
 )
 
-# ---- Remove Irrelevant / Redundant Columns ----
+# ---- Remove Irrelevant / Redundant Columns 
 # (post-decision leakage vars, high-cardinality fields, operational timestamps)
 org <- subset(org, select = -c(
   Person.Id, Major.2, Major.1...Cleaned, Minor...Cleaned, Undergraduate.University,
@@ -55,14 +48,14 @@ org <- subset(org, select = -c(
   Sign.up.Date, Started.Date, Confirmed.TFA.Offer
 ))
 
-# ---- Convert Categorical Predictors to Factors ----
+# ---- Convert Categorical Predictors to Factors 
 org$App.Started.Year..RTAT. <- factor(org$App.Started.Year..RTAT.)
 org$Is.Math..Sci..or.Eng.Major.Minor <- factor(org$Is.Math..Sci..or.Eng.Major.Minor)
 org$Region.Preference.Level <- factor(org$Region.Preference.Level)
 org$Completed.Admissions.Process <- factor(org$Completed.Admissions.Process)
 org$School.Selectivity <- factor(org$School.Selectivity)
 
-# ---- GPA Cleaning, Clustering & Imputation ----
+# ---- GPA Cleaning, Clustering & Imputation 
 org$Cumulative.GPA[org$Cumulative.GPA == 0] <- NA
 gpa_data <- na.omit(org$Cumulative.GPA)
 gpa_matrix <- matrix(gpa_data, ncol = 1)
@@ -78,7 +71,7 @@ org$GPA_Group <- cut(
 )
 org$Cumulative.GPA[is.na(org$Cumulative.GPA)] <- mean(org$Cumulative.GPA, na.rm = TRUE)
 
-# ---- Dummy Variables for Low-Cardinality Factors ----
+# ---- Dummy Variables for Low-Cardinality Factors 
 dummy_obj <- dummyVars(
   ~ School.Selectivity + Region.Preference.Level +
     Is.Math..Sci..or.Eng.Major.Minor + App.Started.Year..RTAT.,
@@ -99,13 +92,13 @@ str(org_model)
 # Remove remaining high-cardinality fields before modeling
 org_model <- org_model %>% select(-Major.1, -Minor)
 
-# ---- Train-Test Split (80/20) ----
+# ---- Train-Test Split (80/20) 
 set.seed(123)
 train_index <- createDataPartition(org_model$Completed.Admissions.Process, p = 0.8, list = FALSE)
 train_data <- org_model[train_index, ]
 test_data <- org_model[-train_index, ]
 
-# ---- Standardize Numeric Predictors ----
+# ---- Standardize Numeric Predictors 
 num_vars <- sapply(train_data, is.numeric)
 preproc <- preProcess(train_data[, num_vars], method = c("center", "scale"))
 train_scaled <- train_data
@@ -119,9 +112,8 @@ test_scaled <- na.omit(test_scaled)
 table(train_scaled$Completed.Admissions.Process)
 table(test_scaled$Completed.Admissions.Process)
 
-# =========================================================================
 # MODEL 1: K-Nearest Neighbors (KNN)
-# =========================================================================
+
 set.seed(123)
 sample_index <- createDataPartition(
   train_scaled$Completed.Admissions.Process,
@@ -146,9 +138,8 @@ confusionMatrix(knn_pred, test_scaled$Completed.Admissions.Process)
 # team's top-performing model in the final comparison -- see
 # TFA_Final_Presentation.pdf for the final 5-model results.
 
-# =========================================================================
 # MODEL 2: Artificial Neural Network (ANN)
-# =========================================================================
+
 set.seed(123)
 tfa_data <- org_model
 tfa_data$GPA_Group <- cut(
@@ -198,7 +189,7 @@ confusionMatrix(ann_pred, test_data$Completed.Admissions.Process)
 # comparison across all 5 models, KNN outperformed ANN on Kappa and
 # sensitivity/specificity balance and was selected as the final model.
 
-# ---- Visualize Network ----
+# ---- Visualize Network 
 net <- ann_model$finalModel
 plotnet(net)
 
