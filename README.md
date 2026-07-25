@@ -39,7 +39,7 @@ Five classification models were built and evaluated on accuracy, Kappa, sensitiv
 | Model | Notes |
 |---|---|
 | **KNN** | Selected as the best-performing model — highest accuracy, highest Kappa, and the best balance of sensitivity/specificity |
-| ANN | Neural network (`nnet`), hyperparameter-tuned via cross-validation (15-node hidden layer) |
+| ANN | Neural network (`nnet`), hyperparameter-tuned via cross-validation (15-node hidden layer); high specificity but weak Kappa, like the models below |
 | Naive Bayes | Built for comparison on the same cleaned dataset; high specificity but low Kappa/sensitivity, did not outperform KNN |
 | SVM | Built for comparison on the same cleaned dataset; high specificity but low Kappa/sensitivity, did not outperform KNN |
 | Decision Tree | Built for comparison on the same cleaned dataset; high specificity but low Kappa/sensitivity, did not outperform KNN |
