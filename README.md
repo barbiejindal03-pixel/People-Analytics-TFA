@@ -1,6 +1,6 @@
 # People Analytics at Teach For America — Recruitment Funnel Prediction
 
-**Team 5 | MAX 522: Predictive Analytics**
+**MAX 522: Predictive Analytics**
 Adam Bashir, Adina Asanova, Barbie Jindal, Indrani Grewal, Rachel Lummis, Victoria Vann
 
 ---
@@ -40,9 +40,9 @@ Five classification models were built and evaluated on accuracy, Kappa, sensitiv
 |---|---|
 | **KNN** | Selected as the best-performing model — highest accuracy, highest Kappa, and the best balance of sensitivity/specificity |
 | ANN | Neural network (`nnet`), hyperparameter-tuned via cross-validation (15-node hidden layer) |
-| Naive Bayes | |
-| SVM | |
-| Decision Tree | |
+| Naive Bayes | Built for comparison on the same cleaned dataset; high specificity but low Kappa/sensitivity, did not outperform KNN |
+| SVM | Built for comparison on the same cleaned dataset; high specificity but low Kappa/sensitivity, did not outperform KNN |
+| Decision Tree | Built for comparison on the same cleaned dataset; high specificity but low Kappa/sensitivity, did not outperform KNN |
 
 The R script in this repo covers the data cleaning, feature engineering, and the KNN + ANN modeling pipeline in detail. The full 5-model comparison and final selection are documented in the accompanying team presentation (`TFA_Final_Presentation.pdf`).
 
