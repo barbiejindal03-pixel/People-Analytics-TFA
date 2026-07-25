@@ -1,7 +1,7 @@
 # People Analytics at Teach For America — Recruitment Funnel Prediction
 
 **MAX 522: Predictive Analytics**
-Adam Bashir, Adina Asanova, Barbie Jindal, Indrani Grewal, Rachel Lummis, Victoria Vann
+- Barbie Jindal, Indrani Grewal, Rachel Lummis, Victoria Vann, Adam Bashir, Adina Asanova,
 
 ---
 
