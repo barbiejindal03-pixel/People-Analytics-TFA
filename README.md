@@ -86,4 +86,3 @@ install.packages(c("caret", "tidyverse", "nnet", "fastDummies", "NeuralNetTools"
 # Update the file path in the script to your local copy of the dataset, then run top to bottom.
 ```
 
-Note: the raw applicant dataset is not included in this repo due to privacy considerations (personally identifiable admissions data).
